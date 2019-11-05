@@ -1,0 +1,163 @@
+--- services/plugins/vix/vixTools.c.orig
++++ services/plugins/vix/vixTools.c
+@@ -2522,10 +2522,10 @@ VixTools_GetToolsPropertiesImpl(GKeyFile *confDictRef,            // IN
+    char *guestName;
+    int osFamily;
+    char *packageList = NULL;
+-   const char *powerOffScript = NULL;
+-   const char *powerOnScript = NULL;
+-   const char *resumeScript = NULL;
+-   const char *suspendScript = NULL;
++   char *powerOffScript = NULL;
++   char *powerOnScript = NULL;
++   char *resumeScript = NULL;
++   char *suspendScript = NULL;
+    char *osName = NULL;
+    char *osNameFull = NULL;
+    Bool foundHostName;
+@@ -2726,6 +2726,10 @@ abort:
+    free(tempDir);
+    free(osName);
+    free(osNameFull);
++   free(suspendScript);
++   free(resumeScript);
++   free(powerOnScript);
++   free(powerOffScript);
+ #else
+    /*
+     * FreeBSD. We do not require all the properties above.
+@@ -9617,7 +9621,6 @@ VixToolsListAuthAliases(VixCommandRequestHeader *requestMsg, // IN
+    char *endDestPtr;
+    char *tmpBuf = NULL;
+    char *tmpBuf2 = NULL;
+-   char *recordBuf;
+    size_t recordSize;
+    char *escapedStr = NULL;
+    char *escapedStr2 = NULL;
+@@ -9676,6 +9679,8 @@ VixToolsListAuthAliases(VixCommandRequestHeader *requestMsg, // IN
+    destPtr += Str_Sprintf(destPtr, endDestPtr - destPtr, "%s",
+                           VIX_XML_ESCAPED_TAG);
+    for (i = 0; i < num; i++) {
++      char *recordBuf = NULL;
++
+       escapedStr = VixToolsEscapeXMLString(uaList[i].pemCert);
+       if (escapedStr == NULL) {
+          err = VIX_E_OUT_OF_MEMORY;
+@@ -9746,6 +9751,8 @@ VixToolsListAuthAliases(VixCommandRequestHeader *requestMsg, // IN
+          Log("%s: ListAuth list results too large, truncating", __FUNCTION__);
+          goto abort;
+       }
++      free(recordBuf);
++      recordBuf = NULL;
+    }
+ 
+    *result = resultBuffer;
+@@ -9813,7 +9820,6 @@ VixToolsListMappedAliases(VixCommandRequestHeader *requestMsg, // IN
+    char *endDestPtr;
+    char *tmpBuf = NULL;
+    char *tmpBuf2 = NULL;
+-   char *recordBuf;
+    char *escapedStr = NULL;
+    char *escapedStr2 = NULL;
+    size_t recordSize;
+@@ -9866,6 +9872,8 @@ VixToolsListMappedAliases(VixCommandRequestHeader *requestMsg, // IN
+    destPtr += Str_Sprintf(destPtr, endDestPtr - destPtr, "%s",
+                           VIX_XML_ESCAPED_TAG);
+    for (i = 0; i < num; i++) {
++      char *recordBuf = NULL;
++
+       escapedStr = VixToolsEscapeXMLString(maList[i].pemCert);
+       if (escapedStr == NULL) {
+          err = VIX_E_OUT_OF_MEMORY;
+@@ -9934,6 +9942,8 @@ VixToolsListMappedAliases(VixCommandRequestHeader *requestMsg, // IN
+          Log("%s: ListMapped results too large, truncating", __FUNCTION__);
+          goto abort;
+       }
++      free(recordBuf);
++      recordBuf = NULL;
+    }
+ 
+    *result = resultBuffer;
+@@ -11546,6 +11556,7 @@ GuestAuthPasswordAuthenticateImpersonate(
+    VGAuthError vgErr;
+    VGAuthUserHandle *newHandle = NULL;
+    VGAuthExtraParams extraParams[1];
++   Bool impersonated = FALSE;
+ 
+    extraParams[0].name = VGAUTH_PARAM_LOAD_USER_PROFILE;
+    extraParams[0].value = VGAUTH_PARAM_VALUE_TRUE;
+@@ -11581,9 +11592,11 @@ GuestAuthPasswordAuthenticateImpersonate(
+       goto done;
+    }
+ 
++   impersonated = TRUE;
++
+ #ifdef _WIN32
+    // this is making a copy of the token, be sure to close it
+-   err = VGAuth_UserHandleAccessToken(ctx, newHandle, userToken);
++   vgErr = VGAuth_UserHandleAccessToken(ctx, newHandle, userToken);
+    if (VGAUTH_FAILED(vgErr)) {
+       err = VixToolsTranslateVGAuthError(vgErr);
+       goto done;
+@@ -11599,6 +11612,14 @@ done:
+    free(username);
+    Util_ZeroFreeString(password);
+ 
++   if (VIX_OK != err) {
++      if (impersonated) {
++         vgErr = VGAuth_EndImpersonation(ctx);
++         ASSERT(vgErr == VGAUTH_E_OK);
++      }
++      VGAuth_UserHandleFree(newHandle);
++      newHandle = NULL;
++   }
+    return err;
+ #else
+    return VIX_E_NOT_SUPPORTED;
+@@ -11630,12 +11651,13 @@ GuestAuthSAMLAuthenticateAndImpersonate(
+ {
+ #if SUPPORT_VGAUTH
+    VixError err;
+-   char *token;
+-   char *username;
++   char *token = NULL;
++   char *username = NULL;
+    VGAuthContext *ctx = NULL;
+    VGAuthError vgErr;
+    VGAuthUserHandle *newHandle = NULL;
+    VGAuthExtraParams extraParams[1];
++   Bool impersonated = FALSE;
+ 
+    extraParams[0].name = VGAUTH_PARAM_LOAD_USER_PROFILE;
+    extraParams[0].value = VGAUTH_PARAM_VALUE_TRUE;
+@@ -11727,9 +11749,11 @@ impersonate:
+       goto done;
+    }
+ 
++   impersonated = TRUE;
++
+ #ifdef _WIN32
+    // this is making a copy of the token, be sure to close it
+-   err = VGAuth_UserHandleAccessToken(ctx, newHandle, userToken);
++   vgErr = VGAuth_UserHandleAccessToken(ctx, newHandle, userToken);
+    if (VGAUTH_FAILED(vgErr)) {
+       err = VixToolsTranslateVGAuthError(vgErr);
+       goto done;
+@@ -11742,6 +11766,17 @@ impersonate:
+    err = VIX_OK;
+ 
+ done:
++   Util_ZeroFreeString(token);
++   Util_ZeroFreeString(username);
++
++   if (VIX_OK != err) {
++      if (impersonated) {
++         vgErr = VGAuth_EndImpersonation(ctx);
++         ASSERT(vgErr == VGAUTH_E_OK);
++      }
++      VGAuth_UserHandleFree(newHandle);
++      newHandle = NULL;
++   }
+ 
+    return err;
+ #else
