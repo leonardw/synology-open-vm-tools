@@ -14,6 +14,7 @@ LICENSE  = GPLv2/LGPLv2.1
 
 PRE_CONFIGURE_TARGET = vmtools_pre_configure
 INSTALL_TARGET = vmtools_install
+POST_INSTALL_TARGET = vmtools_post_install
 
 ENV += CUSTOM_PROCPS_NAME=procps
 ENV += CUSTOM_PROCPS_LIBS="-L$(STAGING_INSTALL_PREFIX)/lib -lprocps"
@@ -46,3 +47,8 @@ vmtools_pre_configure:
 .PHONY: vmtools_install
 vmtools_install:
 	$(RUN) $(MAKE) install DESTDIR=$(STAGING_INSTALL_PREFIX) prefix=""
+
+.PHONY: vmtools_post_install
+vmtools_post_install:
+	chmod a-x $(STAGING_INSTALL_PREFIX)/etc/vmware-tools/*.conf
+	chmod a-x $(STAGING_INSTALL_PREFIX)/lib/udev/rules.d/99-vmware-scsi-udev.rules
