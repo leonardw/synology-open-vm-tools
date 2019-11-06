@@ -14,7 +14,7 @@ rsc:etc/vmware-tools/poweron-vm-default
 rsc:etc/vmware-tools/resume-vm-default
 rsc:etc/vmware-tools/statechange.subr
 rsc:etc/vmware-tools/suspend-vm-default
-rsc:etc/vmware-tools/vm-support
+bin:bin/vm-support
 lnk:lib/libDeployPkg.so
 lnk:lib/libDeployPkg.so.0
 lib:lib/libDeployPkg.so.0.0.0

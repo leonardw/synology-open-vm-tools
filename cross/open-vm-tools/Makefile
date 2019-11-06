@@ -52,3 +52,4 @@ vmtools_install:
 vmtools_post_install:
 	chmod a-x $(STAGING_INSTALL_PREFIX)/etc/vmware-tools/*.conf
 	chmod a-x $(STAGING_INSTALL_PREFIX)/lib/udev/rules.d/99-vmware-scsi-udev.rules
+	mv $(STAGING_INSTALL_PREFIX)/etc/vmware-tools/vm-support $(STAGING_INSTALL_PREFIX)/bin/
