@@ -1,3 +1,4 @@
+bin:bin/vm-support
 bin:bin/vmhgfs-fuse
 bin:bin/vmtoolsd
 bin:bin/vmware-checkvm
@@ -14,7 +15,6 @@ rsc:etc/vmware-tools/poweron-vm-default
 rsc:etc/vmware-tools/resume-vm-default
 rsc:etc/vmware-tools/statechange.subr
 rsc:etc/vmware-tools/suspend-vm-default
-bin:bin/vm-support
 lnk:lib/libDeployPkg.so
 lnk:lib/libDeployPkg.so.0
 lib:lib/libDeployPkg.so.0.0.0
@@ -37,3 +37,10 @@ lib:lib/open-vm-tools/plugins/vmsvc/libtimeSync.so
 lib:lib/open-vm-tools/plugins/vmsvc/libvmbackup.so
 rsc:lib/udev/rules.d/99-vmware-scsi-udev.rules
 bin:sbin/mount.vmhgfs
+rsc:share/open-vm-tools/messages/de/toolboxcmd.vmsg
+rsc:share/open-vm-tools/messages/de/vmtoolsd.vmsg
+rsc:share/open-vm-tools/messages/ja/toolboxcmd.vmsg
+rsc:share/open-vm-tools/messages/ja/vmtoolsd.vmsg
+rsc:share/open-vm-tools/messages/ko/toolboxcmd.vmsg
+rsc:share/open-vm-tools/messages/ko/vmtoolsd.vmsg
+rsc:share/open-vm-tools/messages/zh_CN/toolboxcmd.vmsg
