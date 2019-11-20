@@ -24,6 +24,7 @@ LICENSE  = GPLv2/LGPLv2.1
 # 'auto' reserved value grabs SPK_NAME
 SERVICE_USER  = auto
 SERVICE_SETUP = src/service-setup.sh
+CONF_DIR      = src/conf
 STARTABLE     = yes
 
 # POST_STRIP_TARGET = vmtools_extra_install
