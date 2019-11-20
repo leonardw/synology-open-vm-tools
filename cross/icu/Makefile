@@ -17,7 +17,7 @@ LICENSE  = Unicode Copyright
 # ADDITIONAL_LDFLAGS =
 
 GNU_CONFIGURE = 1
-CONFIGURE_ARGS = --host=x86_64-pc-linux-gnu --with-cross-build=$(WORK_DIR)/../../../native/$(PKG_NAME)/work-native/$(PKG_DIR)
+CONFIGURE_ARGS = --host=$(TC_TARGET) --with-cross-build=$(WORK_DIR)/../../../native/$(PKG_NAME)/work-native/$(PKG_DIR)
 CONFIGURE_ARGS += --enable-extras=no --enable-strict=no --enable-tests=no --enable-samples=no
 # CONFIGURE_ARGS += --with-data-packaging=files
 
