@@ -6,7 +6,7 @@ PKG_DIST_NAME = $(PKG_NAME)-$(PKG_VERS)-$(PKG_BUILD).$(PKG_EXT)
 PKG_DIST_SITE = https://github.com/vmware/open-vm-tools/releases/download/stable-$(PKG_VERS)
 PKG_DIR = $(PKG_NAME)-$(PKG_VERS)-$(PKG_BUILD)
 
-DEPENDS = cross/libmspack cross/glib cross/openssl cross/libdnet cross/fuse cross/libtirpc cross/procps-ng
+DEPENDS = cross/libmspack cross/glib cross/openssl cross/libdnet cross/fuse cross/libtirpc cross/procps-ng cross/icu
 
 HOMEPAGE = https://github.com/vmware/open-vm-tools
 COMMENT  = VMware open-vm-tools project
@@ -31,7 +31,7 @@ CONFIGURE_ARGS += --without-pam
 CONFIGURE_ARGS += --without-xmlsec1
 # CONFIGURE_ARGS += --without-xmlsecurity
 # CONFIGURE_ARGS += --without-xerces
-CONFIGURE_ARGS += --without-icu
+# CONFIGURE_ARGS += --without-icu
 
 # CONFIGURE_ARGS += --without-root-privileges
 #redundant CONFIGURE_ARGS += --with-dnet
