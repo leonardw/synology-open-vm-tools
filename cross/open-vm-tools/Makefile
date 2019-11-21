@@ -19,9 +19,6 @@ POST_INSTALL_TARGET = vmtools_post_install
 ENV += CUSTOM_PROCPS_NAME=procps
 ENV += CUSTOM_PROCPS_LIBS="-L$(STAGING_INSTALL_PREFIX)/lib -lprocps"
 ENV += PATH=$(STAGING_INSTALL_PREFIX)/bin:$$PATH
-# ADDITIONAL_CFLAGS = -Wno-error -Dlinux=1 -Wno-implicit-function-declaration
-# ADDITIONAL_LDFLAGS = -L$(STAGING_INSTALL_PREFIX)/lib64 -Wl,--rpath-link,$(STAGING_INSTALL_PREFIX)/lib64 -Wl,--rpath,$(INSTALL_PREFIX)/lib64
-# ADDITIONAL_CXXFLAGS = -std=c++11
 
 GNU_CONFIGURE = 1
 CONFIGURE_ARGS = --without-x
@@ -29,14 +26,6 @@ CONFIGURE_ARGS += --disable-resolutionkms
 CONFIGURE_ARGS += --with-tirpc
 CONFIGURE_ARGS += --without-pam
 CONFIGURE_ARGS += --without-xmlsec1
-# CONFIGURE_ARGS += --without-xmlsecurity
-# CONFIGURE_ARGS += --without-xerces
-# CONFIGURE_ARGS += --without-icu
-
-# CONFIGURE_ARGS += --without-root-privileges
-#redundant CONFIGURE_ARGS += --with-dnet
-#redundant CONFIGURE_ARGS += --enable-deploypkg
-#redundant CONFIGURE_ARGS += --without-kernel-modules
 
 include ../../mk/spksrc.cross-cc.mk
 
