@@ -1,6 +1,6 @@
 # Home Assistant core
 homeassistant==0.87.1
-aiohttp==3.5.4
+aiohttp==3.7.4
 idna-ssl>=1.0		# needed for aiohttp
 multidict<5.0,>=4.0	# needed for aiohttp
 yarl<2.0,>=1.0		# needed for aiohttp
