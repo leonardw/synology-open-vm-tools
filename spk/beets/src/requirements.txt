@@ -10,7 +10,7 @@ Flask==1.0.2
 Flask-Cors==3.0.6
 itsdangerous==0.24
 jellyfish==0.6.1
-Jinja2==2.10
+Jinja2==2.11.3
 #MarkupSafe==0.23
 munkres==1.0.11
 musicbrainzngs==0.6
