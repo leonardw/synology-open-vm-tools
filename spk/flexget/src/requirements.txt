@@ -23,7 +23,7 @@ futures==3.0.5
 guessit==2.0.4
 html5lib==0.999999999
 itsdangerous==0.24
-Jinja2==2.9.5
+Jinja2==2.11.3
 jsonschema==2.5.1
 #MarkupSafe==0.23
 path.py==10.1
