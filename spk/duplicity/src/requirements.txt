@@ -11,7 +11,7 @@ pyrax==1.9.8
 
 #pyrax dependencies
 appdirs==1.4.0
-Babel==2.3.4
+Babel==2.9.1
 debtcollector==1.11.0
 funcsigs==1.0.2
 ip-associations-python-novaclient-ext==0.2
