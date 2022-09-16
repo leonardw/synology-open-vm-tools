@@ -23,7 +23,7 @@ futures==2.2.0
 itsdangerous==0.24
 Jinja2==2.7.3
 kombu==3.0.23
-Mako==1.0.0
+Mako==1.2.2
 MarkupSafe==0.23
 mimerender==0.5.4
 oauthlib==0.7.2
